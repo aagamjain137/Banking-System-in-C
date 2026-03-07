@@ -31,26 +31,63 @@ int main() {
             case 2: depositMoney(); break;
             case 3: withdrawMoney(); break;
             case 4: checkBalance(); break;
-            case 5: exit(0);
+
+            // CHANGE: Exit message added
+            case 5:
+                printf("Thank you for using the banking system!\n");
+                exit(0);
+
             default: printf("Invalid choice!\n");
         }
     }
 }
 
 void createAccount() {
-    struct Account acc;
+
+    struct Account acc, temp;
     FILE *fp;
 
-    fp = fopen("bank.txt", "ab");
+    // CHANGE: .txt replaced with .dat because we are using binary file functions
+    fp = fopen("bank.dat", "ab+");
+
+    // CHANGE: file open error check
+    if (fp == NULL) {
+        printf("Unable to open file!\n");
+        return;
+    }
 
     printf("Enter Account Number: ");
     scanf("%d", &acc.accNo);
+
+    // CHANGE: account number minimum digit validation (must be at least 6 digits)
+    if (acc.accNo < 100000) {
+        printf("Account number must be at least 6 digits!\n");
+        fclose(fp);
+        return;
+    }
+
+    // CHANGE: duplicate account number check
+    rewind(fp);
+    while (fread(&temp, sizeof(temp), 1, fp)) {
+        if (temp.accNo == acc.accNo) {
+            printf("Account already exists!\n");
+            fclose(fp);
+            return;
+        }
+    }
 
     printf("Enter Name: ");
     scanf(" %[^\n]", acc.name);
 
     printf("Enter Initial Balance: ");
     scanf("%f", &acc.balance);
+
+    // CHANGE: minimum initial balance validation (minimum 500 required)
+    if (acc.balance < 500) {
+        printf("Initial balance must be at least 500!\n");
+        fclose(fp);
+        return;
+    }
 
     fwrite(&acc, sizeof(acc), 1, fp);
     fclose(fp);
@@ -59,15 +96,18 @@ void createAccount() {
 }
 
 void depositMoney() {
+
     struct Account acc;
     FILE *fp;
     int accNo, found = 0;
     float amount;
 
-    fp = fopen("bank.txt", "rb+");
+    // CHANGE: file extension corrected
+    fp = fopen("bank.dat", "rb+");
 
+    // CHANGE: file open check
     if (fp == NULL) {
-        printf("No account found!\n");
+        printf("No account file found!\n");
         return;
     }
 
@@ -75,10 +115,18 @@ void depositMoney() {
     scanf("%d", &accNo);
 
     while (fread(&acc, sizeof(acc), 1, fp)) {
+
         if (acc.accNo == accNo) {
 
             printf("Enter amount to deposit: ");
             scanf("%f", &amount);
+
+            // CHANGE: negative deposit validation
+            if (amount <= 0) {
+                printf("Invalid amount!\n");
+                fclose(fp);
+                return;
+            }
 
             acc.balance += amount;
 
@@ -98,15 +146,18 @@ void depositMoney() {
 }
 
 void withdrawMoney() {
+
     struct Account acc;
     FILE *fp;
     int accNo, found = 0;
     float amount;
 
-    fp = fopen("bank.txt", "rb+");
+    // CHANGE: file extension corrected
+    fp = fopen("bank.dat", "rb+");
 
+    // CHANGE: file open check
     if (fp == NULL) {
-        printf("No account found!\n");
+        printf("No account file found!\n");
         return;
     }
 
@@ -114,14 +165,24 @@ void withdrawMoney() {
     scanf("%d", &accNo);
 
     while (fread(&acc, sizeof(acc), 1, fp)) {
+
         if (acc.accNo == accNo) {
 
             printf("Enter amount to withdraw: ");
             scanf("%f", &amount);
 
+            // CHANGE: negative withdraw validation
+            if (amount <= 0) {
+                printf("Invalid amount!\n");
+                fclose(fp);
+                return;
+            }
+
             if (amount > acc.balance) {
                 printf("Insufficient balance!\n");
-            } else {
+            }
+            else {
+
                 acc.balance -= amount;
 
                 fseek(fp, -sizeof(acc), SEEK_CUR);
@@ -142,14 +203,17 @@ void withdrawMoney() {
 }
 
 void checkBalance() {
+
     struct Account acc;
     FILE *fp;
     int accNo, found = 0;
 
-    fp = fopen("bank.txt", "rb");
+    // CHANGE: file extension corrected
+    fp = fopen("bank.dat", "rb");
 
+    // CHANGE: file open check
     if (fp == NULL) {
-        printf("No account found!\n");
+        printf("No account file found!\n");
         return;
     }
 
@@ -157,9 +221,12 @@ void checkBalance() {
     scanf("%d", &accNo);
 
     while (fread(&acc, sizeof(acc), 1, fp)) {
+
         if (acc.accNo == accNo) {
+
             printf("\nAccount Holder: %s\n", acc.name);
             printf("Current Balance: %.2f\n", acc.balance);
+
             found = 1;
             break;
         }
