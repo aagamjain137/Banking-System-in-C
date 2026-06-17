@@ -1,76 +1,98 @@
 # Banking System in C
 
-A simple console-based Banking System developed using the C programming language.
-This project performs basic banking operations and stores account data using file handling.
-
----
+A console-based Banking Management System developed in C using binary file handling and structured programming concepts.
 
 ## Features
 
-* Create a new account
-* Deposit money
-* Withdraw money
-* Check account balance
-* Permanent data storage using files
-* Duplicate account validation
-* Minimum balance validation
-
----
+* Create New Account
+* Deposit Money
+* Withdraw Money
+* Check Account Balance
+* Transfer Money Between Accounts
+* Modify Account Details
+* Delete Account (Soft Delete)
+* View Transaction History
+* List All Active Accounts
+* Date & Time Based Transaction Logging
+* Input Validation and Error Handling
 
 ## Concepts Used
 
 * Structures
 * Functions
 * File Handling
-* Conditional Statements
-* Switch Case
+* Binary Files
+* Dynamic Data Management
+* Transaction Logging
+* Modular Programming
 
----
+## Files Used
 
-## Technologies Used
+### bank.dat
 
-* C Programming
-* GCC Compiler
+Stores account information.
 
----
+### transactions.dat
+
+Stores transaction history including:
+
+* Deposits
+* Withdrawals
+* Transfers
+* Account Creation
+* Account Deletion
+
+## Account Information Stored
+
+* Account Number
+* Account Holder Name
+* Phone Number
+* Account Type
+* Current Balance
+* Account Status
+
+## How to Compile
+
+```bash
+gcc banking_system.c -o bank
+```
 
 ## How to Run
 
 ```bash
-gcc bank.c -o bank
 ./bank
 ```
 
----
+Windows:
 
-## Sample Output
+```bash
+bank.exe
+```
 
-```text
-===== BANKING SYSTEM =====
+## Sample Operations
+
 1. Create Account
 2. Deposit Money
 3. Withdraw Money
 4. Check Balance
-5. Exit
-```
+5. Transfer Money
+6. Delete Account
+7. Modify Account Details
+8. View Transaction History
+9. List All Accounts
 
----
+## Learning Outcomes
 
-## Future Improvements
+This project helped in understanding:
 
-* Password protection
-* Transaction history
-* Money transfer feature
-* Better user interface
-
----
-
-## Why I Made This
-
-I created this project to practice file handling in C and understand how banking record management works in real-world applications.
-
----
+* Binary File Handling
+* Record Management
+* Structures in C
+* Data Validation
+* Transaction Processing
+* Banking System Workflow
 
 ## Author
 
 Aagam Jain
+ent
