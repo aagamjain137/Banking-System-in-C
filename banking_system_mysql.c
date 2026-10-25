@@ -6,7 +6,7 @@
 
 #define DB_HOST "localhost"
 #define DB_USER "root"
-#define DB_PASSWORD "aagam" /* Replace with your MySQL root password */
+#define DB_PASSWORD "aagam"
 #define DB_NAME "bank_system_v2"
 
 static MYSQL *conn = NULL;
@@ -232,7 +232,6 @@ void createAccount(void)
         return;
     }
 
-    /* Also prevent reusing a soft-deleted account number, because acc_no is a primary key. */
     if (getAccount(acc.accNo, &acc))
     {
         printf("[ERROR] This account number already exists in the database.\n");
